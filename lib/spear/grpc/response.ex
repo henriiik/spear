@@ -45,7 +45,9 @@ defmodule Grpc.Response do
     }
   end
 
-  def from_connection_response(%Response{headers: headers, data: data, status: 200}, rpc, raw?) do
+  def from_connection_response(%Response{headers: headers, data: data, status: 200} = res, rpc, raw?) do
+    IO.inspect(res)
+
     with {"grpc-status", "0"} <- List.keyfind(headers, "grpc-status", 0),
          {:ok, parsed_data} <- parse_data(data, rpc, raw?) do
       %__MODULE__{
@@ -67,6 +69,7 @@ defmodule Grpc.Response do
             end),
           data: data
         }
+        |> IO.inspect()
 
       _ ->
         %__MODULE__{
